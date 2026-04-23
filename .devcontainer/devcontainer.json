@@ -1,5 +1,5 @@
 {
-	"name": "WordPress Plugin Boilerplate",
+	"name": "WordPress M169 Projekt",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "wordpress",
 	"workspaceFolder": "/workspace",
@@ -7,9 +7,25 @@
 	
 	// Use 'settings' to set *default* container specific settings.json values on container create. 
 	// You can edit these settings after create using File > Preferences > Settings > Remote.
-	"settings": { 
-		"terminal.integrated.shell.linux": "/bin/bash"
-	},
+	// Add the IDs of extensions you want installed when the container is created in the array below.
+	"customizations": {
+		"vscode": {
+		  "settings": {
+			"terminal.integrated.shell.linux": "/bin/bash"
+		  },
+		  "extensions": [
+			"felixfbecker.php-debug",
+			"felixfbecker.php-intellisense",
+			"ikappas.composer",
+			"ikappas.phpcs"
+		  ]
+		}
+	  },
+
+	// felixfbecker.php-debug ermöglicht es, Fehler im Code effektiv zu finden und zu beheben.
+	// felixfbecker.php-intellisense bietet erweiterte Autovervollständigung und Syntax-Highlighting.
+	// ikappas.composer erleichtert die Verwaltung von PHP-Paketen.
+	// ikappas.phpcs stellt sicher, dass der Code den definierten Standards entspricht.
 		
 	// Use 'appPort' to create a container with published ports. If the port isn't working, be sure
 	// your server accepts connections from all interfaces (0.0.0.0 or '*'), not just localhost.
@@ -19,13 +35,6 @@
 	// "postCreateCommand": "php -v",
 
 	// Comment out if you want to use root
-	"remoteUser": "vscode",
+	"remoteUser": "vscode"
 
-	// Add the IDs of extensions you want installed when the container is created in the array below.
-	"extensions": [
-		"felixfbecker.php-debug",
-		"felixfbecker.php-intellisense",
-		"ikappas.composer",
-		"ikappas.phpcs"
-	]
 }

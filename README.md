@@ -30,6 +30,10 @@ These instructions should get you a working container environment to test and de
 
 Once the container is built and up and running, you should be able to access the WordPress instance via `http://localhost:8080`.  The installer should appear on first run.
 
+## Opening in Dev Container
+
+[![Open in Dev Container](https://img.shields.io/badge/Open%20in-Dev%20Container-blue)](vscode://vscode-remote/containers?url=https://github.com/noeoedi/wordpress-vscode-container)
+
 ## Making Changes
 
 If you want to amend the supplied Dockerfile or docker-compose.yml to your own liking, do so but don't forget to use the **Remote-Containers: Rebuild Container** command in VS Code command to rebuild the VS Code container.
@@ -67,3 +71,4 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+

@@ -1,0 +1,34 @@
+version: '3.6'
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    networks: 
+      - devnet
+    environment:
+      MYSQL_DATABASE: wordydb
+      MYSQL_USER: wordyuser
+      MYSQL_PASSWORD: wordypass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - devnet
+    ports:
+      - 8080:80
+    volumes:
+      - ..:/workspace:cached
+      - ../wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordyuser
+      WORDPRESS_DB_PASSWORD: wordypass
+      WORDPRESS_DB_NAME: wordydb
+
+networks: 
+  devnet:
