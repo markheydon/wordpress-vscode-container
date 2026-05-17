@@ -1,3 +1,14 @@
+# Repo now archived
+
+As part of my recent review of all my repos, I've decided to archive this one and replace with these two more modern templates.
+
+* Specific Avada child theme based template -- https://github.com/markheydon/avada-child-theme-dev
+* WordPress plugin template based on the original boilerplate -- https://github.com/markheydon/wordpress-plugin-dev
+
+<details>
+
+<summary>Original repo README...</summary>
+    
 # Wordpress Visual Studio Code Container
 A simple Visual Studio Code Docker container setup for WordPress development.  See [Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) for more information on using containers in VS Code.
 
@@ -67,3 +78,5 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+</details>
