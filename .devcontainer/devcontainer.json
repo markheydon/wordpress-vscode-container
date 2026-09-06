@@ -1,31 +1,28 @@
 {
-	"name": "WordPress Plugin Boilerplate",
+	"name": "WordPress Development",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "wordpress",
 	"workspaceFolder": "/workspace",
 	"shutdownAction": "stopCompose",
-	
-	// Use 'settings' to set *default* container specific settings.json values on container create. 
-	// You can edit these settings after create using File > Preferences > Settings > Remote.
-	"settings": { 
-		"terminal.integrated.shell.linux": "/bin/bash"
-	},
-		
-	// Use 'appPort' to create a container with published ports. If the port isn't working, be sure
-	// your server accepts connections from all interfaces (0.0.0.0 or '*'), not just localhost.
-	// "appPort": [],
-
-	// Uncomment the next line to run commands after the container is created.
-	// "postCreateCommand": "php -v",
-
-	// Comment out if you want to use root
 	"remoteUser": "vscode",
-
-	// Add the IDs of extensions you want installed when the container is created in the array below.
-	"extensions": [
-		"felixfbecker.php-debug",
-		"felixfbecker.php-intellisense",
-		"ikappas.composer",
-		"ikappas.phpcs"
-	]
+	"portsAttributes": {
+		"80": {
+			"label": "WordPress (via Docker localhost:8080)",
+			"onAutoForward": "ignore"
+		}
+	},
+	"postCreateCommand": "if [ -f composer.json ]; then composer install --no-interaction --prefer-dist; fi",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"xdebug.php-debug"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"editor.formatOnSave": false,
+				"php.validate.executablePath": "/usr/local/bin/php"
+			}
+		}
+	}
 }

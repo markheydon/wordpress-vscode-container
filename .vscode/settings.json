@@ -1,4 +1,31 @@
 {
-    "composer.executablePath": "/usr/local/bin/composer",
-    "phpcs.standard": "WordPress"
+	"files.associations": {
+		"*.php": "php"
+	},
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.formatOnSave": false,
+	"files.trimTrailingWhitespace": true,
+	"files.insertFinalNewline": true,
+	"files.eol": "\n",
+	"php.validate.executablePath": "php",
+	"intelephense.files.exclude": [
+		"**/vendor/**",
+		"**/node_modules/**",
+		"**/wordpress/**"
+	],
+	"search.exclude": {
+		"**/vendor": true,
+		"**/node_modules": true,
+		"**/wordpress": true
+	},
+	"files.watcherExclude": {
+		"**/vendor/**": true,
+		"**/node_modules/**": true,
+		"**/wordpress/**": true
+	},
+	"[php]": {
+		"editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+	}
 }

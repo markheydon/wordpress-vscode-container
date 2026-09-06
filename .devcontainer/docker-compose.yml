@@ -1,34 +1,47 @@
-version: '3.6'
-
 services:
   db:
-    image: mariadb
-    restart: always
-    networks: 
+    image: mariadb:11.4
+    restart: unless-stopped
+    networks:
       - devnet
     environment:
-      MYSQL_DATABASE: wordydb
-      MYSQL_USER: wordyuser
-      MYSQL_PASSWORD: wordypass
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordydb}
+      MYSQL_USER: ${MYSQL_USER:-wordyuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wordypass}
+      MYSQL_RANDOM_ROOT_PASSWORD: "1"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u\"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
 
   wordpress:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - devnet
     ports:
-      - 8080:80
+      - "127.0.0.1:8080:80"
     volumes:
       - ..:/workspace:cached
       - ../wordpress:/var/www/html
     environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: wordyuser
-      WORDPRESS_DB_PASSWORD: wordypass
-      WORDPRESS_DB_NAME: wordydb
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wordyuser}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordypass}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordydb}
+      WORDPRESS_CONFIG_EXTRA: "define( 'FS_METHOD', 'direct' );"
 
-networks: 
+networks:
   devnet:
+
+volumes:
+  db_data:

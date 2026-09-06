@@ -1,82 +1,103 @@
-# Repo now archived
+# WordPress Visual Studio Code Container
 
-As part of my recent review of all my repos, I've decided to archive this one and replace with these two more modern templates.
+A drop-in [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) setup for WordPress development.
 
-* Specific Avada child theme based template -- https://github.com/markheydon/avada-child-theme-dev
-* WordPress plugin template based on the original boilerplate -- https://github.com/markheydon/wordpress-plugin-dev
+This repository is **not** designed to be cloned and used as a project. Copy the `.devcontainer` and `.vscode` folders into your existing WordPress plugin or theme workspace, then reopen the folder in a container.
 
-<details>
+## Looking for a full project template?
 
-<summary>Original repo README...</summary>
-    
-# Wordpress Visual Studio Code Container
-A simple Visual Studio Code Docker container setup for WordPress development.  See [Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) for more information on using containers in VS Code.
+If you want a GitHub template with plugin or theme scaffolding, automated setup, and distribution workflows, use one of these instead:
+
+- [wordpress-plugin-dev](https://github.com/markheydon/wordpress-plugin-dev) — WordPress plugin development template
+- [avada-child-theme-dev](https://github.com/markheydon/avada-child-theme-dev) — Avada child theme development template
+
+This repo stays intentionally smaller: a generic container you can drop into any WordPress codebase.
 
 ## What's included?
 
-The files in this project are designed to be dropped-in to a VS Code workspace as-is to provide a simple, working, container for WordPress development.  In other words, this repository is not designed to be cloned and used directly.
+Without modification, the supplied configuration provides:
 
-The configuration files have not been tested with all possible variations of WordPress development, but I personally use them for plugin development including WP CLI projects.
+- WordPress container based on `wordpress:php8.4-apache`
+- MariaDB 11.4 with a persistent database volume
+- Workspace mounted at `/workspace`
+- WordPress files mapped to `./wordpress` (`/var/www/html` in the container)
+- PHP Composer and WP-CLI installed
+- Xdebug 3 enabled (listen on port 9003)
+- `WP_DEBUG` enabled via `WORDPRESS_DEBUG`
+- Direct filesystem writes via `FS_METHOD` for local development
 
-Without modification, the supplied configuration provices the following.
+The configuration has not been tested with every possible WordPress setup, but it is intended for plugin and theme development, including WP-CLI workflows.
 
-- Main VS Code container running the official Docker Hub wordpress image.
-- Mapped folder `./wordpress` to the container WordPress folder (`/var/www/html`).
-- Additional container running MariaDB.
-- PHP Composer installed.
-- WP CLI installed.
-- XDebug enabled via port 9000.
-- WP_DEBUG enabled in wp-config.php file.
+## Getting started
 
-## Getting Started
+1. Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) in VS Code.
+2. If you have not used Dev Containers before, read the [Getting Started](https://code.visualstudio.com/docs/devcontainers/containers#_getting-started) guide.
+3. Download the latest release ZIP from this repository, or copy `.devcontainer` and `.vscode` from a checkout.
+4. Place those folders in the root of your VS Code workspace (where your project files live).
+5. Update the `name` in `.devcontainer/devcontainer.json` to match your project if you want.
+6. Open the Command Palette and run **Dev Containers: Reopen in Container**.
 
-These instructions should get you a working container environment to test and debug your WordPress project.
+On first run, open `http://localhost:8080` and complete the WordPress installer.
 
-1. Install the [Visual Studio Code Remote Development Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) if you don't have it installed already in VS Code.
-1. Additionally, if you haven't already, follow the [Getting Started](https://code.visualstudio.com/docs/remote/containers#_getting-started) steps in the VS Code documenation.
-1. Download the latest zip release file from this repository and unzip to a temporary folder.
-1. Copy the folders `.vscode` and `.devcontainer` from the download into the root of your VS Code workspace folder, i.e. the top level where your project code files are in VS Code.  Amend as needed for your project.
-1. Although the files can be used as-is, you may want to at least update the 'name' in the `.devcontainer/devcontainer.json` file to match that of your project.
-1. At this point, you can open the VS Code command pallette and use the **Remote-Containers: Reopen Folder in Container** command to fire up the container.
+## Making changes
 
-Once the container is built and up and running, you should be able to access the WordPress instance via `http://localhost:8080`.  The installer should appear on first run.
+If you edit `.devcontainer/Dockerfile` or `.devcontainer/docker-compose.yml`, rebuild with **Dev Containers: Rebuild Container**.
 
-## Making Changes
+## Optional Composer and PHPCS
 
-If you want to amend the supplied Dockerfile or docker-compose.yml to your own liking, do so but don't forget to use the **Remote-Containers: Rebuild Container** command in VS Code command to rebuild the VS Code container.
+An optional `composer.json` is included to install PHP CodeSniffer with WordPress Coding Standards.
 
-## Optional 'composer.json' File
+If you are not already using Composer in your project, copy in the supplied `composer.json` and `phpcs.xml`, update the package `name`, then run:
 
-If you aren't using Composer in your project already, feel free to copy in the `composer.json` file supplied.  This enables the PHP Code Sniffer with the WordPress standard installed.  Update the file as required for your project, again at least the 'name' should be changed and remove the 'type' or update it to 'project'.  Run the `Composer: Update` command from the command pallette to install/enable.
-
-If you are using Composer already, then 'require' the following to enable PHP Code Sniffer if you haven't installed/enabled it already.
-
-```
-squizlabs/php_codesniffer:^3.5
-dealerdirect/phpcodesniffer-composer-installer:*
-wp-coding-standards/wpcs:*
+```bash
+composer install
 ```
 
+Composer dependencies are also installed automatically when the dev container starts, if `composer.json` is present.
 
-## Use for Developing Plugins
+Useful commands:
 
-The easiest way to include these files in a Plugin respository, is to follow the [WordPress Plugin Handbook - Best Practices Folder Structure](https://developer.wordpress.org/plugins/plugin-basics/best-practices/#folder-structure) and have a folder at root level named the same as your plugin.  Then, in the docker-compose.yml add something such as the following under the `- ../wordpress:/var/www/html` line under `volumes`...
+```bash
+composer lint
+composer lint:fix
+```
+
+If you already have Composer, add these packages instead:
 
 ```
+squizlabs/php_codesniffer:^3.13
+dealerdirect/phpcodesniffer-composer-installer:^1.1
+wp-coding-standards/wpcs:^3.3
+```
+
+## Use for developing plugins
+
+The easiest approach is to follow the [WordPress Plugin Handbook folder structure](https://developer.wordpress.org/plugins/plugin-basics/best-practices/#folder-structure) and keep your plugin at the workspace root. Then add a volume mapping in `.devcontainer/docker-compose.yml` under the `wordpress` service:
+
+```yaml
     volumes:
       - ..:/workspace:cached
       - ../wordpress:/var/www/html
       - ../plugin-name:/var/www/html/wp-content/plugins/plugin-name
 ```
 
-This will map the root level `plugin-name` folder to the right place in the container.  Update the `.vscode/launch.json` file `pathMappings` section to enable debugging of the same.
+Update `.vscode/launch.json` `pathMappings` if you want to debug plugin files separately:
+
+```json
+"pathMappings": {
+    "/var/www/html/": "${workspaceFolder}/wordpress",
+    "/var/www/html/wp-content/plugins/plugin-name/": "${workspaceFolder}/plugin-name"
+}
+```
+
+## Debugging
+
+Xdebug 3 is configured to listen on port **9003**. Use the **Listen for Xdebug** launch configuration in VS Code.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) for contribution guidance.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-</details>
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
