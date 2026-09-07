@@ -2,7 +2,7 @@
 
 A drop-in [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) setup for WordPress development.
 
-This repository is **not** designed to be cloned and used as a project. Copy the `.devcontainer` and `.vscode` folders into your existing WordPress plugin or theme workspace, then reopen the folder in a container.
+This repository is **not** designed to be cloned and used as a project. Copy the files into your existing WordPress plugin or theme workspace, then reopen the folder in a container. See [Getting started](#getting-started) for the full set of files.
 
 ## Looking for a full project template?
 
@@ -30,14 +30,35 @@ The configuration has not been tested with every possible WordPress setup, but i
 
 ## Getting started
 
+Follow these steps in order. Later sections are extras (PHP version, plugin volume mapping, debugging), not a second copy of the setup.
+
 1. Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) in VS Code.
 2. If you have not used Dev Containers before, read the [Getting Started](https://code.visualstudio.com/docs/devcontainers/containers#_getting-started) guide.
-3. Download the latest release ZIP from this repository, or copy `.devcontainer` and `.vscode` from a checkout.
-4. Place those folders in the root of your VS Code workspace (where your project files live).
-5. Update the `name` in `.devcontainer/devcontainer.json` to match your project if you want.
-6. Open the Command Palette and run **Dev Containers: Reopen in Container**.
+3. Download the latest release ZIP from this repository, or copy the files from a checkout.
+4. Place `.devcontainer` and `.vscode` in the root of your VS Code workspace (where your project files live).
+5. Add PHP CodeSniffer with WordPress Coding Standards:
+   - If the project does **not** already use Composer, also copy `composer.json` and `phpcs.xml` into that same workspace root. Update the package `name` in `composer.json`.
+   - If the project **already** uses Composer, do not overwrite `composer.json`. Add these packages instead:
 
-On first run, open `http://localhost:8080` and complete the WordPress installer.
+     ```
+     squizlabs/php_codesniffer:^3.13
+     dealerdirect/phpcodesniffer-composer-installer:^1.1
+     wp-coding-standards/wpcs:^3.3
+     ```
+
+     Copy `phpcs.xml` if you do not already have a PHPCS config.
+6. Update the `name` in `.devcontainer/devcontainer.json` to match your project if you want.
+7. If this project is not on PHP 8.4, change the image tag **before** the first build (see [PHP version](#php-version)).
+8. Open the Command Palette and run **Dev Containers: Reopen in Container**.
+9. Wait for the container to finish starting. If `composer.json` is present, Composer dependencies install automatically.
+10. Open `http://localhost:8080` and complete the WordPress installer.
+
+Inside the container you can check coding standards with:
+
+```bash
+composer lint
+composer lint:fix
+```
 
 ## PHP version
 
@@ -51,40 +72,13 @@ ARG WORDPRESS_IMAGE=wordpress:php8.4-apache
 
 Use the matching official tag, for example `wordpress:php8.3-apache` or `wordpress:php8.5-apache`. See [WordPress Docker tags](https://hub.docker.com/_/wordpress) and [WordPress PHP compatibility](https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/).
 
-If you also copy the optional `composer.json` / `phpcs.xml`, update the Composer `php` requirement and the PHPCS `testVersion` so they match the image you chose.
+If you copied `composer.json` / `phpcs.xml` (or already have them), update the Composer `php` requirement and the PHPCS `testVersion` so they match the image you chose.
 
 Then rebuild with **Dev Containers: Rebuild Container**. Confirm with `php -v` inside the container.
 
 ## Making changes
 
 If you edit `.devcontainer/Dockerfile` or `.devcontainer/docker-compose.yml`, rebuild with **Dev Containers: Rebuild Container**.
-
-## Optional Composer and PHPCS
-
-An optional `composer.json` is included to install PHP CodeSniffer with WordPress Coding Standards.
-
-If you are not already using Composer in your project, copy in the supplied `composer.json` and `phpcs.xml`, update the package `name`, then run:
-
-```bash
-composer install
-```
-
-Composer dependencies are also installed automatically when the dev container starts, if `composer.json` is present.
-
-Useful commands:
-
-```bash
-composer lint
-composer lint:fix
-```
-
-If you already have Composer, add these packages instead:
-
-```
-squizlabs/php_codesniffer:^3.13
-dealerdirect/phpcodesniffer-composer-installer:^1.1
-wp-coding-standards/wpcs:^3.3
-```
 
 ## Use for developing plugins
 
