@@ -11,7 +11,7 @@
 			"onAutoForward": "ignore"
 		}
 	},
-	"postCreateCommand": "if [ -f composer.json ]; then composer install --no-interaction --prefer-dist; fi",
+	"postCreateCommand": "if [ -f composer.json ]; then if [ -w . ]; then composer install --no-interaction --prefer-dist; else sudo composer install --no-interaction --prefer-dist; fi; fi",
 	"customizations": {
 		"vscode": {
 			"extensions": [

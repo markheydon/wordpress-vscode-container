@@ -84,6 +84,16 @@ Then rebuild with **Dev Containers: Rebuild Container**. Confirm with `php -v` i
 
 If you edit `.devcontainer/Dockerfile` or `.devcontainer/docker-compose.yml`, rebuild with **Dev Containers: Rebuild Container**.
 
+## Podman
+
+These files work with Podman as well as Docker. Point VS Code **Docker Path** at `podman`, install a compose provider in the same WSL distro (`docker-compose-v2` or `podman-compose`), and use fully qualified image names as shipped here.
+
+Rootless Podman maps bind-mount UIDs differently from Docker. If `composer install` cannot write `composer.lock` or `vendor/`, the post-create step falls back to `sudo`. To make the `vscode` user match your host user (so you can write without sudo), add this to the `wordpress` service in `docker-compose.yml` — **Podman only**; Docker does not accept it:
+
+```yaml
+    userns_mode: keep-id
+```
+
 ## Use for developing plugins
 
 The easiest approach is to follow the [WordPress Plugin Handbook folder structure](https://developer.wordpress.org/plugins/plugin-basics/best-practices/#folder-structure) and keep your plugin at the workspace root. Then add a volume mapping in `.devcontainer/docker-compose.yml` under the `wordpress` service:
