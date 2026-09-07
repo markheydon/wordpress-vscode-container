@@ -39,6 +39,22 @@ The configuration has not been tested with every possible WordPress setup, but i
 
 On first run, open `http://localhost:8080` and complete the WordPress installer.
 
+## PHP version
+
+The container is pinned to **PHP 8.4** (`wordpress:php8.4-apache`). That is a current, well-supported default, not a match for every existing plugin or theme.
+
+If you drop these files into a project that already targets another PHP release, change the image before you build. In [`.devcontainer/Dockerfile`](.devcontainer/Dockerfile):
+
+```dockerfile
+ARG WORDPRESS_IMAGE=wordpress:php8.4-apache
+```
+
+Use the matching official tag, for example `wordpress:php8.3-apache` or `wordpress:php8.5-apache`. See [WordPress Docker tags](https://hub.docker.com/_/wordpress) and [WordPress PHP compatibility](https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/).
+
+If you also copy the optional `composer.json` / `phpcs.xml`, update the Composer `php` requirement and the PHPCS `testVersion` so they match the image you chose.
+
+Then rebuild with **Dev Containers: Rebuild Container**. Confirm with `php -v` inside the container.
+
 ## Making changes
 
 If you edit `.devcontainer/Dockerfile` or `.devcontainer/docker-compose.yml`, rebuild with **Dev Containers: Rebuild Container**.
