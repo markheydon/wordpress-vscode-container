@@ -17,7 +17,7 @@ This repo stays intentionally smaller: a generic container you can drop into any
 
 Without modification, the supplied configuration provides:
 
-- WordPress container based on `wordpress:php8.4-apache`
+- WordPress container based on `docker.io/library/wordpress:php8.4-apache`
 - MariaDB 11.4 with a persistent database volume
 - Workspace mounted at `/workspace`
 - WordPress files mapped to `./wordpress` (`/var/www/html` in the container)
@@ -64,15 +64,17 @@ composer lint:fix
 
 ## PHP version
 
-The container is pinned to **PHP 8.4** (`wordpress:php8.4-apache`). That is a current, well-supported default, not a match for every existing plugin or theme.
+The container is pinned to **PHP 8.4** (`docker.io/library/wordpress:php8.4-apache`). That is a current, well-supported default, not a match for every existing plugin or theme.
+
+Images are fully qualified (`docker.io/library/...`) so Docker and Podman both resolve them. Short names like `wordpress:php8.4-apache` work on Docker; Podman often does not, unless you configure unqualified search registries.
 
 If you drop these files into a project that already targets another PHP release, change the image before you build. In [`.devcontainer/Dockerfile`](.devcontainer/Dockerfile):
 
 ```dockerfile
-ARG WORDPRESS_IMAGE=wordpress:php8.4-apache
+ARG WORDPRESS_IMAGE=docker.io/library/wordpress:php8.4-apache
 ```
 
-Use the matching official tag, for example `wordpress:php8.3-apache` or `wordpress:php8.5-apache`. See [WordPress Docker tags](https://hub.docker.com/_/wordpress) and [WordPress PHP compatibility](https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/).
+Use the matching official tag, for example `docker.io/library/wordpress:php8.3-apache` or `docker.io/library/wordpress:php8.5-apache`. See [WordPress Docker tags](https://hub.docker.com/_/wordpress) and [WordPress PHP compatibility](https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/).
 
 If you copied `composer.json` / `phpcs.xml` (or already have them), update the Composer `php` requirement and the PHPCS `testVersion` so they match the image you chose.
 

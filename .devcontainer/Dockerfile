@@ -1,4 +1,4 @@
-ARG WORDPRESS_IMAGE=wordpress:php8.4-apache
+ARG WORDPRESS_IMAGE=docker.io/library/wordpress:php8.4-apache
 FROM ${WORDPRESS_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
