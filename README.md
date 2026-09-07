@@ -36,8 +36,8 @@ Follow these steps in order. Later sections are extras (PHP version, plugin volu
 2. If you have not used Dev Containers before, read the [Getting Started](https://code.visualstudio.com/docs/devcontainers/containers#_getting-started) guide.
 3. Download the latest release ZIP from this repository, or copy the files from a checkout.
 4. Place `.devcontainer` and `.vscode` in the root of your VS Code workspace (where your project files live).
-5. Add PHP CodeSniffer with WordPress Coding Standards:
-   - If the project does **not** already use Composer, also copy `composer.json` and `phpcs.xml` into that same workspace root. Update the package `name` in `composer.json`.
+5. Optionally add PHP CodeSniffer with WordPress Coding Standards. Composer is not required for the container to run; skip this step if you do not want it.
+   - If the project does **not** already use Composer, copy `composer.json` and `phpcs.xml` into that same workspace root.
    - If the project **already** uses Composer, do not overwrite `composer.json`. Add these packages instead:
 
      ```
@@ -47,13 +47,15 @@ Follow these steps in order. Later sections are extras (PHP version, plugin volu
      ```
 
      Copy `phpcs.xml` if you do not already have a PHPCS config.
-6. Update the `name` in `.devcontainer/devcontainer.json` to match your project if you want.
+6. Update project names to match your workspace:
+   - `name` in `.devcontainer/devcontainer.json`
+   - `name` in `composer.json`, if you copied that file in the previous step
 7. If this project is not on PHP 8.4, change the image tag **before** the first build (see [PHP version](#php-version)).
 8. Open the Command Palette and run **Dev Containers: Reopen in Container**.
 9. Wait for the container to finish starting. If `composer.json` is present, Composer dependencies install automatically.
 10. Open `http://localhost:8080` and complete the WordPress installer.
 
-Inside the container you can check coding standards with:
+If you added Composer, you can check coding standards inside the container with:
 
 ```bash
 composer lint
