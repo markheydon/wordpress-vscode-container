@@ -1,14 +1,26 @@
 {
-    "name": "mhcg/wordpress-vscode-container",
-    "description": "Composer configuration to enable PHP Code Sniffer with the WordPress standard installed.",
-    "license": "GPL-2.0-or-later",
-    "type": "metapackages",
-    "require": {
-        "php": ">=7.2"
-    },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^3.5",
-        "dealerdirect/phpcodesniffer-composer-installer": "*",
-        "wp-coding-standards/wpcs": "*"
-    }
+	"name": "mhcg/wordpress-vscode-container",
+	"description": "Optional Composer configuration for PHP CodeSniffer with WordPress Coding Standards.",
+	"type": "project",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": ">=8.3"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+		"squizlabs/php_codesniffer": "^3.13.4",
+		"wp-coding-standards/wpcs": "^3.3"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"sort-packages": true
+	},
+	"scripts": {
+		"lint": "phpcs --standard=phpcs.xml",
+		"lint:fix": "phpcbf --standard=phpcs.xml",
+		"lint:php": "phpcs --standard=phpcs.xml --extensions=php --report=full",
+		"standards": "phpcs -i"
+	}
 }
