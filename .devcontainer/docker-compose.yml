@@ -1,6 +1,6 @@
 services:
   db:
-    image: docker.io/library/mariadb:12.3
+    image: docker.io/library/mariadb:13.0
     restart: unless-stopped
     networks:
       - devnet
